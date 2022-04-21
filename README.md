@@ -17,7 +17,7 @@ For this tutorial, we look at the Vagrant way.
 
  ### 1. Install Vagrant
 
-For this setup, you'll first need to install Vagrant on your machine. Read the [documentation here]("https://www.vagrantup.com/docs/installation"). In our case, I'm using the a NixOS distribution. 
+For this setup, you'll first need to install Vagrant on your machine. Read the [documentation here](https://www.vagrantup.com/docs/installation). In our case, I'm using the a NixOS distribution. 
 
 I'll add `vagrant` in the  in my `/etc/nixos/confguration.nix` file : 
 
@@ -110,6 +110,19 @@ Finally, for each worker node, we define the configuration, just like for the ma
   end
 
 ```
- The `Vagrantfile` file reffers to the shell scripts located in the `/scripts` folder. The master node uses `master.sh` and the worker nodes use the `node.sh` one.
- 
- 
+The `Vagrantfile` file reffers to the shell scripts located in the `/scripts` folder. The master node uses `master.sh` and the worker nodes use `node.sh`.
+
+These scripts are used to configure your machines. They'll be run on your machines to install the necessary dependencies, in our case, kubeadm, kubectl...
+
+### 4. Provision machines with Ansible
+  
+This part is still on process.
+  
+### 5. Launch cluster
+   
+Navigate to your main folder, where your `Vagrantfile` is located.
+
+run `vagrant up`. This might take a while. 
+
+  
+
