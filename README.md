@@ -1,94 +1,44 @@
 
-# Vagrantfile and Scripts to Automate Kubernetes Setup using Kubeadm [Practice Environemnt for CKA/CKAD and CKS Exams]
+## Setup a Kubernetes cluster using Vagrant 
 
-## Documentation
 
-Current k8s version for CKA, CKAD and CKS exam: 1.23
+### Summary 
 
-Refer this link for documentation: https://devopscube.com/kubernetes-cluster-vagrant/
+ 1. Install Vagrant
+ 2. Clone repository
+ 3. Provision machines with Shell
+ 4. Provision machines with Ansible
+ 5. Launch cluster
 
-## 🚀 CKA, CKAD, CKS or KCNA Voucher Codes
+ ### 1. Install Vagrant
 
-If you are preparing for CKA, CKAD, CKS or KCNA exam, **get 40% discount** today using code **SPRING40** at https://kube.promo/spring. It is a limited time Spring sale offer
+For this setup, you'll first need to install Vagrant on your machine. Read the <a src = "https://www.vagrantup.com/docs/installation">documentation here</a>. In our case, I'm using the a NixOS distribution. 
 
-## Prerequisites
+I'll add `vagrant` in the  in my `/etc/nixos/confguration.nix` file : 
 
-1. Working Vagrant setup
-2. 8 Gig + RAM workstation as the Vms use 3 vCPUS and 4+ GB RAM
+`
+{...}
+environment.systemPackages = with pkgs; [
+    vim
+    curl
+    thunderbird
+    nodejs
+    chromium
+    keybase-gui
+    keybase
+    docker
+    docker-compose
+    kubernetes
+    kubernetes-helm
+    kubectl
+    minikube
+    yarn
+    vagrant 
+  ];
+`
 
-## For MAC Users
+Finally, run `sudo nixos-rebuild switch`.
 
-Latest version of Virtualbox for Mac/Linux can cause issues because you have to create/edit the /etc/vbox/networks.conf file and add:
-<pre>* 0.0.0.0/0 ::/0</pre>
+2. Clone repository 
 
-or run below commands
-```sh
-sudo mkdir -p /etc/vbox/
-echo * 0.0.0.0/0 ::/0 | sudo tee -a /etc/vbox/networks.conf
-```
-
-So that the host only networks can be in any range, not just 192.168.56.0/21 as described here:
-https://discuss.hashicorp.com/t/vagrant-2-2-18-osx-11-6-cannot-create-private-network/30984/23
- 
-## Usage/Examples
-
-To provision the cluster, execute the following commands.
-
-```shell
-git clone https://github.com/scriptcamp/vagrant-kubeadm-kubernetes.git
-cd vagrant-kubeadm-kubernetes
-vagrant up
-```
-
-## Set Kubeconfig file varaible.
-
-```shell
-cd vagrant-kubeadm-kubernetes
-cd configs
-export KUBECONFIG=$(pwd)/config
-```
-
-or you can copy the config file to .kube directory.
-
-```shell
-cp config ~/.kube/
-```
-
-## Kubernetes Dashboard URL
-
-```shell
-http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/overview?namespace=kubernetes-dashboard
-```
-
-## Kubernetes login token
-
-Vagrant up will create the admin user token and saves in the configs directory.
-
-```shell
-cd vagrant-kubeadm-kubernetes
-cd configs
-cat token
-```
-
-## To shutdown the cluster, 
-
-```shell
-vagrant halt
-```
-
-## To restart the cluster,
-
-```shell
-vagrant up
-```
-
-## To destroy the cluster, 
-
-```shell
-vagrant destroy -f
-```
-
-## Centos & HA based Setup
-
-If you want Centos based setup, please refer https://github.com/marthanda93/VAAS
-  
+get in your terminal and run `git clone https://github.com/EliottElek/k8s-setup-with-vagrant.git` to clone the repository.
