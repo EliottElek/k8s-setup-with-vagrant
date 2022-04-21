@@ -48,7 +48,7 @@ Finally, run `sudo nixos-rebuild switch`.
 
 get in your terminal and run `git clone https://github.com/EliottElek/k8s-setup-with-vagrant.git` to clone the repository.
 
-You'll get the following structure.
+You'll get the following structure:
 
 ![image](https://user-images.githubusercontent.com/64375473/164414643-fbc1807e-35d3-4500-b6b2-a46db0501f21.png)
  
@@ -124,5 +124,29 @@ Navigate to your main folder, where your `Vagrantfile` is located.
 
 run `vagrant up`. This might take a while. 
 
-  
+Once the setup is finished, run `vagrant status` to make sure that your machines are correctly setup. This is what you should get : 
+
+![image](https://user-images.githubusercontent.com/64375473/164425661-64fabc34-8cba-4fa2-83b6-850135b5e8a6.png)
+
+We'll make some further tests to make sure our cluster is correctly setup and that our machines can communicate with each other.
+
+On you terminal, run `vagrant ssh master` to enter the master machine. 
+
+![image](https://user-images.githubusercontent.com/64375473/164426095-b32ce9d4-a033-4b0d-8f76-0e0c3656ae68.png)
+
+You are now on the master machine's terminal. 
+
+run `kubectl get nodes` to list the nodes : 
+
+![image](https://user-images.githubusercontent.com/64375473/164426382-39986b5b-5bff-4d1e-9cc0-e15f0c553e5b.png)
+
+We can see that all our machines are running correctly. Let's now make sure that our machines can communicate with each other. 
+
+For that, we'll try to ping one of our worker machines from master.
+
+In our case, one of the worker machines, worker2 for example, has the following IP address : **192.168.56.12**.
+
+To ping it, let's run, from the master's terminal : `ping 192.168.56.12`. If everything went right, we should get :
+
+![image](https://user-images.githubusercontent.com/64375473/164427179-430810ae-1c69-4616-be75-7f774eaeec36.png)
 
