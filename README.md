@@ -1,11 +1,17 @@
 
 ## Setup a Kubernetes cluster using Vagrant 
 
+### Goal
+
+Create a virtualized kubernetes cluster with one **master** node and five **worker** nodes.
+
 ### Introduction
 
 To use kubeadm, we first need to have a working VM network. There are several choices to do so. We could either set it up by hand, use vagrant and ansible or use NikitaLXD.
 
-For this tutorial, we look at the Vagrant way. 
+For this tutorial, we'll use Vagrant to create our cluster. In order to make ou cluster work, we need to **provision** our virtual machines. For that, we'll look at two ways : 
+ - using Shell
+ - using Ansible
 
 ### Summary 
 
@@ -17,9 +23,9 @@ For this tutorial, we look at the Vagrant way.
 
  ### 1. Install Vagrant
 
-For this setup, you'll first need to install Vagrant on your machine. Read the [documentation here](https://www.vagrantup.com/docs/installation). In our case, I'm using the a NixOS distribution. 
+For this setup, you'll first need to install Vagrant on your machine. Read the [documentation here](https://www.vagrantup.com/docs/installation). In my case, I'm using the a NixOS distribution. 
 
-I'll add `vagrant` in the  in my `/etc/nixos/confguration.nix` file : 
+I'll add `vagrant` in my `/etc/nixos/confguration.nix` file : 
 
 ```
 {...}
@@ -47,12 +53,10 @@ Finally, run `sudo nixos-rebuild switch`.
 ### 2. Clone repository 
 
 get in your terminal and run `git clone https://github.com/EliottElek/k8s-setup-with-vagrant.git` to clone the repository.
-
-You'll get the following structure:
-
-![image](https://user-images.githubusercontent.com/64375473/164414643-fbc1807e-35d3-4500-b6b2-a46db0501f21.png)
  
  ### 3. Provision machines with Shell
+ 
+ Navigate to `/shell-setup`. This is the set-up we'll start with.
  
  Take a look at the `Vagrantfile`.
  
@@ -115,9 +119,47 @@ The `Vagrantfile` file reffers to the shell scripts located in the `/scripts` fo
 These scripts are used to configure your machines. They'll be run on your machines to install the necessary dependencies, in our case, kubeadm, kubectl...
 
 ### 4. Provision machines with Ansible
+
+Navigate to `/k8s-setup-with-vagrant/ansible-setup`. 
   
-This part is still on process.
-  
+To provision your machines with Ansible, you'll have to create **playbooks** that the machines will follow to install all necessary dependencies. The big advantage of using Ansible is the ability to have **idempotence**, which is not guaranteed using Shell.
+
+The first step is to install Ansible. 
+I'll add `ansible` in the  in my `/etc/nixos/confguration.nix` file : 
+
+```
+{...}
+environment.systemPackages = with pkgs; [
+    vim
+    curl
+    thunderbird
+    nodejs
+    chromium
+    keybase-gui
+    keybase
+    docker
+    docker-compose
+    kubernetes
+    kubernetes-helm
+    kubectl
+    minikube
+    yarn
+    vagrant 
+    ansible
+  ];
+```
+
+and run `sudo nixos-rebuild switch`to finalize changes.
+
+Just like for the shell provisioning, we'll use a `Vagrantfile` to launch our cluster. You can take a look at it in `/k8s-setup-with-vagrant/ansible-setup`. 
+
+The next step is to define **playbooks** to set our machines up, as said earlier. Two playbooks have been created : 
+
+- `master-playbook.yml` for the master node
+- `node-playbook.yml` for the worker nodes
+
+You can take a look at these files in /k8s-setup-with-vagrant/ansible-setup/kubernetes-setup`.
+
 ### 5. Launch cluster
    
 Navigate to your main folder, where your `Vagrantfile` is located.
