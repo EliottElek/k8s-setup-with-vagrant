@@ -125,7 +125,7 @@ Navigate to `/k8s-setup-with-vagrant/ansible-setup`.
 To provision your machines with Ansible, you'll have to create **playbooks** that the machines will follow to install all necessary dependencies. The big advantage of using Ansible is the ability to have **idempotence**, which is not guaranteed using Shell.
 
 The first step is to install Ansible. 
-I'll add `ansible` in the  in my `/etc/nixos/confguration.nix` file : 
+I'll add `ansible` in my `/etc/nixos/confguration.nix` file : 
 
 ```
 {...}
